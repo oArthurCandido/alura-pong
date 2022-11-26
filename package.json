@@ -12,7 +12,8 @@
     "@emotion/styled": "latest",
     "@mui/material": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "latest",
