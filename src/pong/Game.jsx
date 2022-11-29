@@ -13,7 +13,8 @@ function Game() {
 
   const [score, setScore] = useState(0)
   const [opponentScore, setOpponentScore] = useState([0, 1, 2, 3, 4])
-  const [gameOver, setGameOver] = useState(false)
+  const [gameOver, setGameOver] = useState(true)
+  const [scoreBoard, setScoreBoard] = useState([])
   const [xPos, setXPos] = useState(0)
   const [yPos, setYPos] = useState(0)
   const [xMove, setXMove] = useState(6)
@@ -69,6 +70,12 @@ function Game() {
   }, [yMove, yPos])
 
   useEffect(() => {
+    if (score === 0) {
+      setSpeed(1)
+      setXMove(6)
+      setYMove(6)
+      setBackgroundLevel('black')
+    }
     if (score === 5) {
       setSpeed(1.5)
       setXMove(xMove * speed)
@@ -76,19 +83,19 @@ function Game() {
       setBackgroundLevel('green')
     }
     if (score === 10) {
-      setSpeed(2)
+      setSpeed(1.8)
       setXMove(xMove * speed)
       setYMove(yMove * speed)
       setBackgroundLevel('blue')
     }
-    if (score === 20) {
-      setSpeed(2.5)
+    if (score === 15) {
+      setSpeed(2)
       setXMove(xMove * speed)
       setYMove(yMove * speed)
       setBackgroundLevel('purple')
     }
-    if (score === 30) {
-      setSpeed(2.7)
+    if (score === 20) {
+      setSpeed(1.1)
       setXMove(xMove * speed)
       setYMove(yMove * speed)
       setBackgroundLevel('red')
@@ -136,6 +143,12 @@ function Game() {
 
   }, [paddlePos, xPos, yPos, xMove, yMove, score, speed])
 
+  useEffect(() => {
+    if (gameOver && score > 0) {
+      setScoreBoard([...scoreBoard, score])
+    }
+  }, [gameOver, score, scoreBoard])
+
   // useEffect(() => {
   //   if (opponentScore.length < 1) {
 
@@ -168,6 +181,13 @@ function Game() {
     }
   }
 
+  const handleStart = () => {
+    setGameOver(false)
+    setScore(0)
+    setOpponentScore([0, 1, 2, 3, 4])
+  }
+
+
 
   // const handleKeyUp = (e) => {
   //   if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
@@ -190,7 +210,7 @@ function Game() {
           <Box tabIndex="0" backgroundColor={backgroundLevel} sx={{ overflow: 'hidden', width: '500px', my: 4, height: '400px', display: 'flex', position: 'absolute', justifyContent: 'space-between', alignItems: 'center' }}>
             {gameOver ? <Box sx={{ margin: '0, auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
               <Typography color={'White'}>Game Over</Typography>
-              <Button variant='contained' onClick={() => window.location.reload()}>Play Again</Button> <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Button variant='contained' onClick={() => handleStart()}>{scoreBoard.length === 0 ? 'Start' : 'Play Again'}</Button> <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography color={'White'}>Score: {score}</Typography>
 
               </Box>
