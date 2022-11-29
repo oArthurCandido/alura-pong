@@ -139,6 +139,13 @@ function Game() {
 
   }, [paddlePos, xPos, yPos, xMove, yMove, score, speed])
 
+  useEffect(() => {
+    if (opponentScore === 5) {
+      setGameOver(true)
+    }
+
+  }, [opponentScore])
+
 
   // useEffect(() => {
   //   if (yMove === 0) {
@@ -157,6 +164,13 @@ function Game() {
     }
   }
 
+  const handleDrag = (e) => {
+    if (e.clientY > 80 && e.clientY < 500) {
+      setPaddlePos(e.clientY - 250)
+    }
+  }
+
+
   // const handleKeyUp = (e) => {
   //   if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
   //     setSpeed(0)
@@ -171,16 +185,29 @@ function Game() {
 
   return (
     <>
+
       <StyledBox onKeyDown={e => handleKeyDown(e)}>
         <Box mt={3} sx={{ overflow: 'hidden' }}>
           <Box tabIndex="0" sx={{ overflow: 'hidden', width: '500px', my: 4, backgroundColor: 'black', height: '400px', display: 'flex', position: 'absolute', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Box ml={2} top={paddlePos} sx={{ width: '10px', height: '80px', backgroundColor: 'white', position: 'relative' }} />
-            <Box left={xPos} top={yPos} sx={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: 'white', position: 'relative' }} />
+            {gameOver ? <Box sx={{ margin: '0, auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
+              <Typography color={'White'}>Game Over</Typography>
+              <Button variant='contained' onClick={() => window.location.reload()}>Play Again</Button> <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Typography color={'White'}>Score: {score}</Typography>
+                <Typography color={'White'}>Opponent Score: {opponentScore}</Typography>
+              </Box>
 
-            <Box top={paddleOppPos} mr={2} sx={{ width: '10px', height: '80px', backgroundColor: 'white', position: 'relative' }} />
+            </Box>
+              :
+              <>
+                <Box draggable='true' onDrag={e => handleDrag(e)} ml={2} top={paddlePos} sx={{ width: '10px', height: '80px', backgroundColor: 'white', position: 'relative' }} />
+                <Box left={xPos} top={yPos} sx={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: 'white', position: 'relative' }} />
+                <Box top={paddleOppPos} mr={2} sx={{ width: '10px', height: '80px', backgroundColor: 'white', position: 'relative' }} />
+              </>}
+
           </Box>
         </Box>
       </StyledBox>
+
       <Typography variant='h3' mt={70} sx={{ textAlign: 'center', }}>
         Score: {score}
       </Typography>
