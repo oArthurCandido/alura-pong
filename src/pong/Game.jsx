@@ -12,7 +12,7 @@ const StyledBox = styled('div')`
 function Game() {
 
   const [score, setScore] = useState(0)
-  const [opponentScore, setOpponentScore] = useState(0)
+  const [opponentScore, setOpponentScore] = useState([0, 1, 2, 3, 4])
   const [gameOver, setGameOver] = useState(false)
   const [xPos, setXPos] = useState(0)
   const [yPos, setYPos] = useState(0)
@@ -21,6 +21,7 @@ function Game() {
   const [speed, setSpeed] = useState(1)
   const [paddlePos, setPaddlePos] = useState(0)
   const [paddleOppPos, setPaddleOppPos] = useState(0)
+  const [backgroundLevel, setBackgroundLevel] = useState('black')
   // const [paddleMove, setPaddleMove] = useState(0)
   // const [paddleWidth, setPaddleWidth] = useState(100)
   // const [paddleHeight, setPaddleHeight] = useState(20)
@@ -68,40 +69,31 @@ function Game() {
   }, [yMove, yPos])
 
   useEffect(() => {
-    if (score === 10) {
+    if (score === 5) {
       setSpeed(1.5)
       setXMove(xMove * speed)
+      setYMove(yMove * speed)
+      setBackgroundLevel('green')
     }
-    if (score === 20) {
+    if (score === 10) {
       setSpeed(2)
       setXMove(xMove * speed)
+      setYMove(yMove * speed)
+      setBackgroundLevel('blue')
     }
-    if (score === 30) {
+    if (score === 20) {
       setSpeed(2.5)
       setXMove(xMove * speed)
+      setYMove(yMove * speed)
+      setBackgroundLevel('purple')
     }
-    if (score === 40) {
-      setSpeed(3)
+    if (score === 30) {
+      setSpeed(2.7)
       setXMove(xMove * speed)
+      setYMove(yMove * speed)
+      setBackgroundLevel('red')
     }
-    if (score === 50) {
-      setSpeed(3.5)
-    }
-    if (score === 60) {
-      setSpeed(4)
-    }
-    if (score === 70) {
-      setSpeed(4.5)
-    }
-    if (score === 80) {
-      setSpeed(5)
-    }
-    if (score === 90) {
-      setSpeed(5.5)
-    }
-    if (score === 100) {
-      setSpeed(6)
-    }
+
   }, [score])
 
 
@@ -113,12 +105,17 @@ function Game() {
       setXMove(xMove * -1)
     }
     if (xPos < -234) {
-      setOpponentScore(opponentScore + 1)
+      let popped = opponentScore.pop()
+      setOpponentScore(opponentScore)
       setXPos(-234)
       setXMove(xMove * -1)
+      if (opponentScore.length < 1) {
+
+        setGameOver(true)
+      }
     }
 
-  }, [xMove, xPos])
+  }, [xMove, xPos, score, opponentScore])
 
   useEffect(() => {
     if (xPos > 209) {
@@ -139,12 +136,13 @@ function Game() {
 
   }, [paddlePos, xPos, yPos, xMove, yMove, score, speed])
 
-  useEffect(() => {
-    if (opponentScore === 5) {
-      setGameOver(true)
-    }
+  // useEffect(() => {
+  //   if (opponentScore.length < 1) {
 
-  }, [opponentScore])
+  //     setGameOver(true)
+  //   }
+
+  // }, [opponentScore])
 
 
   // useEffect(() => {
@@ -188,12 +186,13 @@ function Game() {
 
       <StyledBox onKeyDown={e => handleKeyDown(e)}>
         <Box mt={3} sx={{ overflow: 'hidden' }}>
-          <Box tabIndex="0" sx={{ overflow: 'hidden', width: '500px', my: 4, backgroundColor: 'black', height: '400px', display: 'flex', position: 'absolute', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', maxWidth: '500px' }}>{opponentScore.map((score, index) => { return <Box sx={{ width: '80px', height: '10px', backgroundColor: 'black', position: 'relative' }} /> })}</Box>
+          <Box tabIndex="0" backgroundColor={backgroundLevel} sx={{ overflow: 'hidden', width: '500px', my: 4, height: '400px', display: 'flex', position: 'absolute', justifyContent: 'space-between', alignItems: 'center' }}>
             {gameOver ? <Box sx={{ margin: '0, auto', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
               <Typography color={'White'}>Game Over</Typography>
               <Button variant='contained' onClick={() => window.location.reload()}>Play Again</Button> <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography color={'White'}>Score: {score}</Typography>
-                <Typography color={'White'}>Opponent Score: {opponentScore}</Typography>
+
               </Box>
 
             </Box>
@@ -211,9 +210,7 @@ function Game() {
       <Typography variant='h3' mt={70} sx={{ textAlign: 'center', }}>
         Score: {score}
       </Typography>
-      <Typography variant='h3' mt={2} sx={{ textAlign: 'center', }}>
-        Opponent Score: {opponentScore}
-      </Typography>
+
     </>
 
   )
