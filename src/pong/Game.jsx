@@ -44,8 +44,8 @@ function Game() {
 
 
 
-  const [brasilsil] = useSound(bra, { volume: 0.25 })
-  const [rightHere] = useSound(right, { volume: 0.25 })
+
+
   const [hitBallSound] = useSound(hitGame, { volume: 0.3 })
   const [looseSound] = useSound(loose, { volume: 0.3 })
   const [gainSound] = useSound(gain, { volume: 0.3 })
