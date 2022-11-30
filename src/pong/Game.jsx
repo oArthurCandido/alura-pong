@@ -2,6 +2,15 @@ import { Box, Button, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
+import useSound from 'use-sound'
+import bra from '../sounds/bra.mp3'
+import right from '../sounds/FatboySlim-RightHereRightNow.mp3'
+import loop from '../sounds/loop.mp3'
+import loop2 from '../sounds/loop2.mp3'
+import hitBall from '../sounds/hitBall.wav'
+import hitGame from '../sounds/hitGame.wav'
+import loose from '../sounds/loose.wav'
+import gain from '../sounds/gain.flac'
 
 const StyledBox = styled('div')`
   
@@ -23,6 +32,7 @@ function Game() {
   const [paddlePos, setPaddlePos] = useState(0)
   const [paddleOppPos, setPaddleOppPos] = useState(0)
   const [backgroundLevel, setBackgroundLevel] = useState('black')
+  const [playbackRateSetted, setPlaybackRateSetted] = useState(1)
   // const [paddleMove, setPaddleMove] = useState(0)
   // const [paddleWidth, setPaddleWidth] = useState(100)
   // const [paddleHeight, setPaddleHeight] = useState(20)
@@ -34,12 +44,23 @@ function Game() {
   // const [gameHeight, setGameHeight] = useState(500)
 
 
+
+  const [brasilsil] = useSound(bra, { volume: 0.25 })
+  const [rightHere] = useSound(right, { volume: 0.25 })
+  const [hitBallSound] = useSound(hitGame, { volume: 0.3 })
+  const [looseSound] = useSound(loose, { volume: 0.3 })
+  const [gainSound] = useSound(gain, { volume: 0.3 })
+  const [loopSound, { stop }] = useSound(loop2, { volume: 0.1, loop: true, playbackRate: playbackRateSetted })
+
+
+
   useEffect(() => {
     let timeId;
     if (!gameOver) {
       timeId = setInterval(() => {
         setXPos(xPos + xMove)
         setYPos(yPos + yMove)
+
       }, 24)
     }
     return () => clearInterval(timeId)
@@ -71,30 +92,35 @@ function Game() {
 
   useEffect(() => {
     if (score === 0) {
+      setPlaybackRateSetted(1)
       setSpeed(1)
       setXMove(6)
       setYMove(6)
       setBackgroundLevel('black')
     }
-    if (score === 5) {
+    if (score === 1) {
+      setPlaybackRateSetted(1.1)
       setSpeed(1.5)
       setXMove(xMove * speed)
       setYMove(yMove * speed)
       setBackgroundLevel('green')
     }
-    if (score === 10) {
+    if (score === 3) {
+      setPlaybackRateSetted(1.2)
       setSpeed(1.8)
       setXMove(xMove * speed)
       setYMove(yMove * speed)
       setBackgroundLevel('blue')
     }
-    if (score === 15) {
+    if (score === 5) {
+      setPlaybackRateSetted(1.3)
       setSpeed(2)
       setXMove(xMove * speed)
       setYMove(yMove * speed)
       setBackgroundLevel('purple')
     }
-    if (score === 20) {
+    if (score === 6) {
+      setPlaybackRateSetted(1.4)
       setSpeed(1.1)
       setXMove(xMove * speed)
       setYMove(yMove * speed)
@@ -107,18 +133,20 @@ function Game() {
   useEffect(() => {
     if (xPos > 234) {
       setScore(score + 1)
-
+      gainSound()
       setXPos(234)
       setXMove(xMove * -1)
     }
     if (xPos < -234) {
       let popped = opponentScore.pop()
       setOpponentScore(opponentScore)
+      looseSound()
       setXPos(-234)
       setXMove(xMove * -1)
       if (opponentScore.length < 1) {
 
         setGameOver(true)
+        stop()
       }
     }
 
@@ -129,6 +157,7 @@ function Game() {
       if (yPos > paddleOppPos - 50 && yPos < paddleOppPos + 50) {
         setXPos(208)
         setXMove(xMove * -1)
+        hitBallSound()
 
       }
 
@@ -137,6 +166,7 @@ function Game() {
       if (yPos > paddlePos - 50 && yPos < paddlePos + 50) {
         setXPos(-208)
         setXMove(xMove * -1)
+        hitBallSound()
 
       }
     }
@@ -183,6 +213,7 @@ function Game() {
 
   const handleStart = () => {
     setGameOver(false)
+    loopSound()
     setScore(0)
     setOpponentScore([0, 1, 2, 3, 4])
   }

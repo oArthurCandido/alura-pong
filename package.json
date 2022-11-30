@@ -13,7 +13,8 @@
     "@mui/material": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "use-sound": "^4.0.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "latest",
