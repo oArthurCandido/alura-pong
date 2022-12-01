@@ -176,22 +176,8 @@ function Game() {
     if (gameOver && score > 0) {
       setScoreBoard([...scoreBoard, score])
     }
-  }, [gameOver, score, scoreBoard])
+  }, [gameOver, score])
 
-  // useEffect(() => {
-  //   if (opponentScore.length < 1) {
-
-  //     setGameOver(true)
-  //   }
-
-  // }, [opponentScore])
-
-
-  // useEffect(() => {
-  //   if (yMove === 0) {
-  //     setGameOver(true)
-  //   }
-  // }, [yMove])
 
 
 
@@ -216,18 +202,6 @@ function Game() {
     setScore(0)
     setOpponentScore([0, 1, 2, 3, 4])
   }
-
-
-
-  // const handleKeyUp = (e) => {
-  //   if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-  //     setSpeed(0)
-  //   }
-  // }
-
-  // const handleScore = () => {
-  //   setScore(score + 1)
-  // }
 
 
 
